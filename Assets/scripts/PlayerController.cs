@@ -74,6 +74,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void PlayerDeath()
+    {
+        playerAnimator.SetTrigger("death");
+    }
+
     private void RunPlayer()
     {
         float playerXmovement = Input.GetAxisRaw("Horizontal");
