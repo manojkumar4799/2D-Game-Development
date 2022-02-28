@@ -6,7 +6,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] Animator playerAnimator;
-    [SerializeField] BoxCollider2D fullCollider;
+    [SerializeField] BoxCollider2D fullBodyCollider;
+    [SerializeField] BoxCollider2D bottomCollider;
+    [SerializeField] BoxCollider2D topCollider;
     public Rigidbody2D rb;
     public float speed;
     [SerializeField] float playerJump;
@@ -21,7 +23,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
-        fullCollider = GetComponent<BoxCollider2D>();
+        fullBodyCollider = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();       
     }
 
@@ -40,7 +42,16 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimator.SetTrigger("jump");
             rb.velocity = new Vector2(0, playerJump);
-        }        
+            topCollider.enabled = true;
+            fullBodyCollider.enabled = false;
+            bottomCollider.enabled = false;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            fullBodyCollider.enabled = true;
+            bottomCollider.enabled = true;
+            topCollider.enabled = false;
+        }
     }
 
     private void PlayerCrouch()
@@ -48,12 +59,16 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            fullCollider.enabled = false;           
+            fullBodyCollider.enabled = false;
+            topCollider.enabled = false;
+            bottomCollider.enabled = true;
             playerAnimator.SetBool("crouch", true);           
         }
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            fullCollider.enabled = true;
+            fullBodyCollider.enabled = true;
+            topCollider.enabled = false;
+            bottomCollider.enabled = false;
             playerAnimator.SetBool("crouch", false);
         }
 
@@ -67,18 +82,17 @@ public class PlayerController : MonoBehaviour
         transform.position = playerPos;
         Vector3 scale = transform.localScale;
         playerAnimator.SetFloat("speed", Mathf.Abs(playerXmovement));
-        playerAnimator.SetBool("jump", false);
-
-        
+        playerAnimator.SetBool("jump", false);        
         
         if (playerXmovement < 0)
         {
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
+            scale.x = -1f * Mathf.Abs(scale.x);
         } 
         if (playerXmovement > 0)
         {
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            scale.x = Mathf.Abs(scale.x);
         }
+        transform.localScale = scale;
        
     }
 }
