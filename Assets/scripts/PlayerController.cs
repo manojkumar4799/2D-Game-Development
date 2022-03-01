@@ -17,19 +17,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform groundcheckTansform;
     public float circleRadius;
     [SerializeField] bool isGrounded;
-   
-
+   // [SerializeField] Transform cameraTarnsform;
 
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
         fullBodyCollider = GetComponent<BoxCollider2D>();
-        rb = GetComponent<Rigidbody2D>();       
+        rb = GetComponent<Rigidbody2D>();
+       // cameraTarnsform = GetComponent<Transform>();
     }
 
     
     void Update()
     {
+       // transform.position = cameraTarnsform.position;
         isGrounded = Physics2D.OverlapCircle(groundcheckTansform.position, circleRadius, groundlayer);
         RunPlayer();
         PlayerCrouch();
