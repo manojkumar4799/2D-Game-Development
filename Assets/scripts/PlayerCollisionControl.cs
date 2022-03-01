@@ -23,7 +23,10 @@ public class PlayerCollisionControl : MonoBehaviour
         if (collision.gameObject.tag == "DeathCollider")
         {
             playerController.PlayerDeath();
+            playerController.enabled = false;
             Destroy(gameObject, 2);
+           
+           
         }
 
         
