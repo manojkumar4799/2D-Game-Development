@@ -3,40 +3,83 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
+
     [SerializeField] Animator playerAnimator;
     [SerializeField] BoxCollider2D fullBodyCollider;
     [SerializeField] BoxCollider2D bottomCollider;
     [SerializeField] BoxCollider2D topCollider;
-    public Rigidbody2D rb;
-    public float speed;
-    [SerializeField] float playerJump;
-
+    [SerializeField] SceneLoader sceneLoader;   
+    public Rigidbody2D rb;  
     [SerializeField] LayerMask groundlayer;
     [SerializeField] Transform groundcheckTansform;
+    PlayerHealth healthSystem;
+
+    public int playerHealth;
+    public float speed;
+    [SerializeField] float playerJump;
     public float circleRadius;
     [SerializeField] bool isGrounded;
-   // [SerializeField] Transform cameraTarnsform;
+
 
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
         fullBodyCollider = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();
-       // cameraTarnsform = GetComponent<Transform>();
+        healthSystem = GetComponent<PlayerHealth>();
+     
     }
 
-    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if (collision.gameObject.tag == "NextScene")
+        {
+            sceneLoader.LoadNextScene();
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            PlayerDamage();
+        }
+
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "DeathCollider")
+        {
+            PlayerDeath();
+            this.enabled = false;          
+
+        }
+        
+    }
+
+
     void Update()
     {
-       // transform.position = cameraTarnsform.position;
+      
         isGrounded = Physics2D.OverlapCircle(groundcheckTansform.position, circleRadius, groundlayer);
         RunPlayer();
         PlayerCrouch();
         PlayerJump();
+        
     }
 
+    public void PlayerDamage()
+    {
+        if (playerHealth > 0)
+        {
+            healthSystem.TakeDamage(playerHealth);
+            playerHealth--;
+        }
+                         
+      
+    }
     private void PlayerJump()
     {
         if(Input.GetKeyDown(KeyCode.Space)&&isGrounded)
@@ -77,8 +120,17 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerDeath()
     {
+        this.enabled = false;
         playerAnimator.SetTrigger("death");
+        Invoke("Reload", 2.2f);
+        
     }
+    private void Reload()
+    {
+        sceneLoader.ReloadScene();
+    }
+    
+   
 
     private void RunPlayer()
     {
