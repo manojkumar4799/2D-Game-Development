@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundlayer;
     [SerializeField] Transform groundcheckTansform;
     PlayerHealth healthSystem;
+    [SerializeField] GameObject DeathUIObject;
 
     public int playerHealth;
     public float speed;
@@ -122,12 +123,13 @@ public class PlayerController : MonoBehaviour
     {
         this.enabled = false;
         playerAnimator.SetTrigger("death");
-        Invoke("Reload", 2.2f);
+        Invoke("DeathUI", 2.2f);
         
     }
-    private void Reload()
+    private void DeathUI()
     {
-        sceneLoader.ReloadScene();
+        DeathUIObject.SetActive(true);
+        Time.timeScale = 0f;
     }
     
    
