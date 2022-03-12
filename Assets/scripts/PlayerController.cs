@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.tag == "NextScene")
         {
-            sceneLoader.LoadNextScene();
+            sceneLoader.LevelCompletePopup();
         }
         if (collision.gameObject.CompareTag("Enemy"))
         {
