@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnimator: {fileID: 199998309}
-  fullBodyCollider: {fileID: 0}
+  fullBodyCollider: {fileID: 199998314}
   bottomCollider: {fileID: 199998315}
   topCollider: {fileID: 199998316}
   sceneLoader: {fileID: 1725080520}
@@ -1843,6 +1843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelSelectPopup: {fileID: 0}
+  LevelCompleteUI: {fileID: 5643087796419174303}
 --- !u!4 &1725080521
 Transform:
   m_ObjectHideFlags: 0
@@ -2701,3 +2702,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 648dab675f4bd23458cfb4e9889eebdb, type: 3}
+--- !u!1 &5643087796419174303 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 63632060, guid: 648dab675f4bd23458cfb4e9889eebdb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5643087796419174302}
+  m_PrefabAsset: {fileID: 0}
