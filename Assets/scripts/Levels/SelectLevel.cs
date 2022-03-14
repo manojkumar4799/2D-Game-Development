@@ -22,10 +22,12 @@ namespace SceneContoller
                     break;
 
                 case LevelStatus.Unlocked:
+                    SoundManager.Instance.PlaySound(Sound.ButtonClick);
                     SceneManager.LoadScene(levelName);
                     break;
 
                 case LevelStatus.Completed:
+                    SoundManager.Instance.PlaySound(Sound.ButtonClick);
                     SceneManager.LoadScene(levelName);
                     break;
 

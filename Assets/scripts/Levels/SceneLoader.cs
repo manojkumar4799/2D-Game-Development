@@ -15,6 +15,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadNextScene()
     {
+        SoundManager.Instance.PlaySound(Sound.StartLevel);
         Time.timeScale = 1f;
         SceneManager.LoadScene(currentScene + 1);
         
@@ -25,11 +26,13 @@ public class SceneLoader : MonoBehaviour
         Time.timeScale = 0f;
         LevelCompleteUI.SetActive(true);
         LevelManager.Instance().MarkLevelStatus();
+        SoundManager.Instance.PlaySound(Sound.levelComplete);
        
     }
 
     public void LevelSelectionPopup()
     {
+        SoundManager.Instance.PlaySound(Sound.ButtonClick);
         levelSelectPopup.SetActive(true);
     }
     

@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform groundcheckTansform;
     PlayerHealth healthSystem;
     [SerializeField] GameObject DeathUIObject;
+    [SerializeField] ParticleSystem deathVFX;
+    [SerializeField] ParticleSystem winVFX;
 
     public int playerHealth;
     public float speed;
@@ -39,7 +41,10 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.tag == "NextScene")
         {
-            sceneLoader.LevelCompletePopup();
+            this.enabled = false;
+            winVFX.Play();
+            Invoke("LevelComplete",2);
+           
         }
         if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -47,6 +52,11 @@ public class PlayerController : MonoBehaviour
         }
 
 
+    }
+
+    private void LevelComplete()
+    {
+        sceneLoader.LevelCompletePopup();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -90,6 +100,7 @@ public class PlayerController : MonoBehaviour
             topCollider.enabled = true;
             fullBodyCollider.enabled = false;
             bottomCollider.enabled = false;
+            SoundManager.Instance.PlaySound(Sound.jump);
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -121,6 +132,8 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerDeath()
     {
+        deathVFX.Play();
+        SoundManager.Instance.BackGroundMusic(Sound.PlayerDeath);
         this.enabled = false;
         playerAnimator.SetTrigger("death");
         Invoke("DeathUI", 2.2f);
@@ -142,8 +155,19 @@ public class PlayerController : MonoBehaviour
         transform.position = playerPos;
         Vector3 scale = transform.localScale;
         playerAnimator.SetFloat("speed", Mathf.Abs(playerXmovement));
-        playerAnimator.SetBool("jump", false);        
-        
+        playerAnimator.SetBool("jump", false);
+        bool isRunning;
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            isRunning = true;
+            SoundManager.Instance.PlayerFootSteps(Sound.PlayerMove, isRunning);
+        }
+        if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
+        {
+            isRunning = false;
+            SoundManager.Instance.PlayerFootSteps(Sound.PlayerMove, isRunning);
+        }
+
         if (playerXmovement < 0)
         {
             scale.x = -1f * Mathf.Abs(scale.x);
