@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Animator playerAnimator;
     [SerializeField] BoxCollider2D fullBodyCollider;
-    [SerializeField] BoxCollider2D bottomCollider;
-    [SerializeField] BoxCollider2D topCollider;
     [SerializeField] SceneLoader sceneLoader;   
     public Rigidbody2D rb;  
     [SerializeField] LayerMask groundlayer;
@@ -19,12 +17,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject DeathUIObject;
     [SerializeField] ParticleSystem deathVFX;
     [SerializeField] ParticleSystem winVFX;
+    [SerializeField] GameObject attackPower;
 
+    public float powerSpeed;
     public int playerHealth;
     public float speed;
     [SerializeField] float playerJump;
     public float circleRadius;
     [SerializeField] bool isGrounded;
+    bool doubleJump = false;
+    [Header("collider settings")]
+    public float yOffset;
+    public float ySize;
+    public float jumpYOffset;
+    public float jumpYSize;
+    public float crouchYOffset;
+    public float crouchYSize;
+
+
+
 
 
     void Start()
@@ -45,14 +56,9 @@ public class PlayerController : MonoBehaviour
             winVFX.Play();
             Invoke("LevelComplete",2);
            
-        }
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            PlayerDamage();
-        }
+        }      
 
-
-    }
+    } 
 
     private void LevelComplete()
     {
@@ -78,7 +84,10 @@ public class PlayerController : MonoBehaviour
         RunPlayer();
         PlayerCrouch();
         PlayerJump();
-        
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            playerAnimator.SetTrigger("Attack");
+        }
     }
 
     public void PlayerDamage()
@@ -97,16 +106,26 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimator.SetTrigger("jump");
             rb.velocity = new Vector2(0, playerJump);
-            topCollider.enabled = true;
-            fullBodyCollider.enabled = false;
-            bottomCollider.enabled = false;
+            fullBodyCollider.offset = new Vector2(fullBodyCollider.offset.x, jumpYOffset);
+            fullBodyCollider.size = new Vector2(fullBodyCollider.size.x, jumpYSize);
+            doubleJump = true;
             SoundManager.Instance.PlaySound(Sound.jump);
+            
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == false && doubleJump == true)
+        {
+            fullBodyCollider.offset = new Vector2(fullBodyCollider.offset.x, jumpYOffset);
+            fullBodyCollider.size = new Vector2(fullBodyCollider.size.x, jumpYSize);
+            playerAnimator.SetTrigger("jump");
+            rb.velocity = new Vector2(0, playerJump);
+            SoundManager.Instance.PlaySound(Sound.jump);
+            doubleJump = false;
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            fullBodyCollider.enabled = true;
-            bottomCollider.enabled = true;
-            topCollider.enabled = false;
+            fullBodyCollider.offset = new Vector2(fullBodyCollider.offset.x, yOffset);
+            fullBodyCollider.size = new Vector2(fullBodyCollider.size.x, ySize);
+          
         }
     }
 
@@ -115,19 +134,28 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            fullBodyCollider.enabled = false;
-            topCollider.enabled = false;
-            bottomCollider.enabled = true;
+
+            fullBodyCollider.offset = new Vector2(fullBodyCollider.offset.x, crouchYOffset);
+            fullBodyCollider.size = new Vector2(fullBodyCollider.size.x, crouchYSize);
             playerAnimator.SetBool("crouch", true);           
         }
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            fullBodyCollider.enabled = true;
-            topCollider.enabled = false;
-            bottomCollider.enabled = false;
+
+            
+            fullBodyCollider.offset = new Vector2(fullBodyCollider.offset.x, yOffset);
+            fullBodyCollider.size = new Vector2(fullBodyCollider.size.x, ySize);
             playerAnimator.SetBool("crouch", false);
         }
 
+    }
+
+    public void PlayerAttack()
+    {
+
+        float powerDir = transform.localScale.x;
+        GameObject power = Instantiate(attackPower, transform.position, Quaternion.identity) ;
+        power.GetComponent<Rigidbody2D>().velocity = new Vector2(powerSpeed*powerDir, 0f);    
     }
 
     public void PlayerDeath()

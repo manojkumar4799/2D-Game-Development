@@ -18,6 +18,10 @@ public class SpinKey : MonoBehaviour
             score.ScoreDisPlay(keyPoints);
             Destroy(gameObject);
         }
+        else
+        {
+            Debug.Log("no score added");
+        }
     }
     void Update()
     {

@@ -14,7 +14,7 @@ public class Score : MonoBehaviour
 
     public void ScoreDisPlay(float points)
     {
-        score = +points;
+        score +=points;
         scoreText.text = "Score: " + score;
     }
 

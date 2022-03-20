@@ -7,17 +7,55 @@ public class Enemy : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] Transform groundCheck;
     [SerializeField] bool movingRight = true;
+    Animator enemyAnimator;
+    public float enemyHealth;
+    
+    
     void Start()
     {
+        enemyAnimator = GetComponent<Animator>();
         
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         EnemyPatrol();
-
+        
     }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<PlayerController>() != null)
+        {
+            collision.gameObject.GetComponent<PlayerController>().PlayerDamage();
+            enemyAnimator.SetTrigger("Attack");
+
+        }
+        if(collision.gameObject.CompareTag("Power"))
+        {
+            TakeDamage();
+        }
+    }
+
+
+
+    private void TakeDamage()
+    {
+        enemyHealth--;
+        if (enemyHealth <= 0)
+        {
+            enemyAnimator.SetTrigger("Death");
+            Invoke("EnemyDeath",1f);
+        }
+    }
+
+    public void EnemyDeath()
+    {
+        gameObject.SetActive(false);
+    }
+
 
     private void EnemyPatrol()
     {
