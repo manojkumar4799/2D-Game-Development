@@ -314,5 +314,7 @@ MonoBehaviour:
     soundType: 6
   - SFX: {fileID: 8300000, guid: 2d63fce4b3ddb8e4cb5a8621754da22e, type: 3}
     soundType: 7
+  - SFX: {fileID: 8300000, guid: f7d80757580ebf14287ba18254f7fe3d, type: 3}
+    soundType: 8
   BGM: {fileID: 2663034500932542482}
   soundSFX: {fileID: 2663034500236317738}

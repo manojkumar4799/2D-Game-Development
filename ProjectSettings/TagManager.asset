@@ -8,6 +8,8 @@ TagManager:
   - NextScene
   - DeathCollider
   - Power
+  - EnemyBeam
+  - ChangeMusic
   layers:
   - Default
   - TransparentFX

@@ -56,7 +56,7 @@ public class SoundManager : MonoBehaviour
     }
     public void BackGroundMusic(Sound music)
     {
-        if (music == Sound.GameMusic)
+        if (music == Sound.GameMusic||music==Sound.BossMusic)
         {
             BGM.loop = true;
         }
@@ -98,6 +98,7 @@ public enum Sound
     jump,
     GameMusic,
     StartLevel,
-    levelComplete
+    levelComplete,
+    BossMusic
 
 }

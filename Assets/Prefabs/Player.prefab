@@ -161,6 +161,10 @@ MonoBehaviour:
   DeathUIObject: {fileID: 0}
   deathVFX: {fileID: 5402882120996892208}
   winVFX: {fileID: 5602269424534553052}
+  attackPower: {fileID: 3744867562474828724, guid: 2d4a1d021e4bcbe4a9b8a44e0dc0491a,
+    type: 3}
+  powerSpeed: 10
+  powerTime: 1.15
   playerHealth: 3
   speed: 5
   playerJump: 4

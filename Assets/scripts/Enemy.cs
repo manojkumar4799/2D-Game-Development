@@ -35,7 +35,9 @@ public class Enemy : MonoBehaviour
         }
         if(collision.gameObject.CompareTag("Power"))
         {
+            this.enabled = false;
             TakeDamage();
+            Destroy(collision.gameObject, 0.15f);
         }
     }
 

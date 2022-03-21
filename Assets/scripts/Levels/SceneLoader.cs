@@ -46,6 +46,7 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene(currentScene);
         Time.timeScale = 1f;
+        SoundManager.Instance.BackGroundMusic(Sound.GameMusic);
     }
 
     public void Quit()

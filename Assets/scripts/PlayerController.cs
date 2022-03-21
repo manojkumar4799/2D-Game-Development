@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject attackPower;
 
     public float powerSpeed;
+    public float powerTime;
     public int playerHealth;
     public float speed;
     [SerializeField] float playerJump;
@@ -56,7 +57,17 @@ public class PlayerController : MonoBehaviour
             winVFX.Play();
             Invoke("LevelComplete",2);
            
-        }      
+        }
+        if (collision.gameObject.CompareTag("EnemyBeam"))
+        {
+            PlayerDamage();
+            Destroy(collision.gameObject, 0.1f);
+        }
+        if (collision.gameObject.CompareTag("ChangeMusic"))
+        {
+            SoundManager.Instance.BackGroundMusic(Sound.BossMusic);
+            Destroy(collision.gameObject, 0.1f);
+        }
 
     } 
 
@@ -155,12 +166,15 @@ public class PlayerController : MonoBehaviour
 
         float powerDir = transform.localScale.x;
         GameObject power = Instantiate(attackPower, transform.position, Quaternion.identity) ;
-        power.GetComponent<Rigidbody2D>().velocity = new Vector2(powerSpeed*powerDir, 0f);    
+        power.GetComponent<Rigidbody2D>().velocity = new Vector2(powerSpeed*powerDir, 0f);
+        Destroy(power, powerTime);
     }
 
     public void PlayerDeath()
     {
         deathVFX.Play();
+        bool isRunning = false;
+        SoundManager.Instance.PlayerFootSteps(Sound.PlayerMove, isRunning);
         SoundManager.Instance.BackGroundMusic(Sound.PlayerDeath);
         this.enabled = false;
         playerAnimator.SetTrigger("death");
@@ -182,7 +196,7 @@ public class PlayerController : MonoBehaviour
         playerPos.x = playerPos.x + playerXmovement * speed * Time.deltaTime;
         transform.position = playerPos;
         Vector3 scale = transform.localScale;
-        playerAnimator.SetFloat("speed", Mathf.Abs(playerXmovement));
+        playerAnimator.SetFloat("speed", Mathf.Abs(playerXmovement));     
         playerAnimator.SetBool("jump", false);
         bool isRunning;
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
